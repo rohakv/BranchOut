@@ -35,13 +35,22 @@ declare module "next-auth" {
  */
 export const authOptions: NextAuthOptions = {
   callbacks: {
-    session({ session, user }) {
-      if (session.user) {
-        session.user.id = user.id;
-        // session.user.role = user.role; <-- put other properties on the session here
+    jwt: ({ token, user }) => {
+      if (user) {
+        token.id = user.id;
       }
-      return session;
+
+      return token;
     },
+    session: ({ session, token }) => {
+      if (token) {
+        session.id = token.id;
+        session.user.image = null; // there was some stupid error with the image not existing
+        session.user.email = null;
+      }
+
+      return session;
+    }
   },
   providers: [
     CredentialsProvider({
@@ -63,7 +72,7 @@ export const authOptions: NextAuthOptions = {
         };
 
         if (payload.username === "Rohak" && payload.password === "Rohak123") {
-          const user: object = { "id": "hello", "username": "Rohak", "password": "Rohak123" };
+          const user: object = { "id": "hello", "name": "Rohak", "password": "Rohak123" };
           return user;
         }
 
