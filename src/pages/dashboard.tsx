@@ -7,16 +7,23 @@ import type { Session } from "next-auth";
 
 type DashboardProps = {
   sessionData: Session;
-  pages: AxiosResponse<any, any>;
+  pages: any;
 };
 
 const Dashboard: NextPage<DashboardProps> = ({ sessionData, pages }) => {
 
-  console.log(`Pages: ${JSON.stringify(pages)}`);
-
   return (
     <>
-        <h1>Your pages</h1>
+      <h1>Your pages</h1>
+      <ul>
+      {pages.map(i => {
+          return (
+            <>
+              <li key={i}>{JSON.stringify(i)}</li>
+            </>
+          )
+        })}
+      </ul>
     </>
   );
 };
@@ -36,11 +43,9 @@ export const getServerSideProps: GetServerSideProps = async (ctx: GetServerSideP
 
     const sessionData = session;
 
-    let pages = await axios.post(`${env.NEXTAUTH_URL}/api/pages`, sessionData);
+    const res = await axios.post(`${env.NEXTAUTH_URL}/api/pages`, {sessionData});
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    pages = pages.data;
-
-    console.log(pages)
+    const pages = res.data;
 
     return {
       props: {

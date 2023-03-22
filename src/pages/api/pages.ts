@@ -3,19 +3,28 @@ import type { Session } from "next-auth";
 
 interface ExtendedNextApiRequest extends NextApiRequest {
   body: {
-    session: Session;
+    sessionData: Session;
   };
 }
 
 export default function handler(req: ExtendedNextApiRequest, res: NextApiResponse) {
   if (req.method === 'POST') {
 
-    const session = req.body.session;
+    let pages;
 
-    console.log("Server: " + JSON.stringify(session));
+    const session = req.body.sessionData;
 
-    res.send("HELLO");
+    if (session["id"] === "hello") {
+      pages = [
+        {
+          name: "first_page",
+          pageURL: "/rohak"
+        }
+      ];
+    }
+
+    res.json({ pages });
   } else {
-    res.send("GET REQUEST")
+    res.send("WRONG METHOD");
   }
 }
