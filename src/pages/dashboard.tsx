@@ -4,7 +4,7 @@ import type { NextPage, GetServerSideProps, GetServerSidePropsContext } from "ne
 import { getBranchOutServerSession } from "~/server/auth";
 import axios, { type AxiosResponse } from "axios";
 import { env } from "~/env.mjs";
-import { JSXElementConstructor, Key, ReactElement, ReactFragment, ReactPortal, useEffect } from "react";
+import { useEffect } from "react";
 import type { Session } from "next-auth";
 
 type DashboardProps = {
@@ -19,8 +19,8 @@ const Dashboard: NextPage<DashboardProps> = ({ sessionData, pages }) => {
       <h1 className="font-bold">Your pages</h1>
       <ul>
         {pages.map((page: {
-            pageURL: string; name: string;
-          }) => {
+          pageURL: string; name: string;
+        }) => {
           return (
             <>
               <li><a href={`/page/${page.pageURL}`} key={page.name} className="text-blue-400">{page.name} - {page.pageURL}</a></li>
@@ -33,33 +33,33 @@ const Dashboard: NextPage<DashboardProps> = ({ sessionData, pages }) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (ctx: GetServerSidePropsContext) => {
-    
-    const session = await getBranchOutServerSession(ctx);
 
-    if (!session) {
-      return {
-        redirect: {
-          destination: "/login",
-          permanent: false,
-        },
-      };
-    }
+  const session = await getBranchOutServerSession(ctx);
 
-    const sessionData = session;
-
-    const res: AxiosResponse<any, any> = await axios.post(`${env.NEXTAUTH_URL}/api/pages`, {sessionData});
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    let pages: any = res.data;
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    pages = pages.pages;
-
+  if (!session) {
     return {
-      props: {
-        sessionData,
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        pages
+      redirect: {
+        destination: "/login",
+        permanent: false,
       },
-    }
+    };
+  }
+
+  const sessionData = session;
+
+  const res: AxiosResponse<any, any> = await axios.post(`${env.NEXTAUTH_URL}/api/pages`, { sessionData });
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  let pages: any = res.data;
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  pages = pages.pages;
+
+  return {
+    props: {
+      sessionData,
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      pages
+    },
+  }
 }
 
 export default Dashboard;
