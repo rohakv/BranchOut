@@ -6,11 +6,13 @@ interface ExtendedNextApiRequest extends NextApiRequest {
   };
 }
 
-export default function handler(req: NextApiRequest, res: NextApiResponse) {
+export default function handler(req: ExtendedNextApiRequest, res: NextApiResponse) {
   if (req.method === "POST") {
     if (!req.body.id) {
-      res.end("dsf");
+      res.end("No req.body");
     }
+
+    console.log(typeof req.body.id);
 
     if (req.body.id === "rohak") {
       const pageData = [
@@ -27,6 +29,8 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
 
       res.json(pageData);
     }
+
+    res.end("id is not rohak")
     
   } else {
     res.send("WRONG METHOD");

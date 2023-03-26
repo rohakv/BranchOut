@@ -1,30 +1,60 @@
 import { useRouter } from "next/router";
-import type { NextPage } from "next";
+import type { GetServerSideProps, GetServerSidePropsContext, NextPage } from "next";
 import { useEffect, useState } from "react";
-import type { GetServerSideProps, GetServerSidePropsContext } from "next";
-import axios from "axios";
-  
-const Page: NextPage = () => {
+import axios, { type AxiosResponse } from "axios";
+import { env } from "~/env.mjs";
+import type { ParsedUrlQuery } from "querystring";
 
-    const [pageData, setPageData] = useState(null);
-    const [name, setName] = useState("")
-  
-    const router = useRouter();
 
-    const { id } = router.query;
+type Props = {
+  pageName: string,
+  pageData: Array<any>
+};
 
-    useEffect(() => {
-      axios.post("/api/page/getpage", { id })
-        .then((res) => {
-          console.log(res.data);
-        })
-    }, [id]);
+interface PageData {
+  type: string;
+  url: string;
+};
 
-    return (
-        <>
-            <h1>Your page: {id}</h1>
-        </>
-    )
+const Page: NextPage<Props> = ({pageName, pageData}) => {
+  return (
+    <>
+    <ul>
+      <h1 className="font-bold">Your page</h1>
+      {pageData.map((data: {
+          type: string; url: string;
+        }) => {
+          return (
+            <>
+              <a href={data.url}>{data.type}</a><br />
+            </>
+          )
+        })}
+      </ul>
+    </>
+  );
+};
+
+export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext) => {
+
+  const pageid: ParsedUrlQuery = context.query;
+
+  const id = pageid.id;
+
+  const res: AxiosResponse<any, any> = await axios.post(`http://localhost:3000/api/page/getpage`, { id });
+
+  const data = res?.data;
+
+  const pageName = data[0];
+
+  const pageData = data.splice(1);
+
+  return {
+    props: {
+      pageName,
+      pageData
+    }
+  };
 }
 
 export default Page;
