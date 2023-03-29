@@ -10,42 +10,48 @@ const myLoader = ({ src, width, quality }) => {
 }
 
 type Props = {
-  pageName: string,
-  pageData: Array<any>
+  pageName: string;
+  pageData: Array<any>;
+  image: any
 };
 
 interface PageData {
   type: string;
   url: string;
-  image: any;
-};
+}
 
 const Page: NextPage<Props> = ({ pageName, pageData, image }) => {
   return (
     <>
-      <Image
-        alt="Vercel logo"
-        loader={myLoader}
-        src={image}
-        width={150}
-        height={150}
-        style={{
-          maxWidth: '100%',
-          height: 'auto',
-        }}
-      />
-      <ul>
-        <h1 className="font-bold">Your page</h1>
-        {pageData.map((data: {
-          type: string; url: string;
-        }) => {
-          return (
-            <>
-              <a href={data.url}>{data.type}</a><br />
-            </>
-          )
-        })}
-      </ul>
+      <div className="w-full h-screen bg-[#F6F1FF]">
+        <div className="flex flex-col items-center justify-center text-center">
+        <Image
+          alt="Vercel logo"
+          loader={myLoader}
+          src={image}
+          width={150}
+          height={150}
+          style={{
+            maxWidth: '100%',
+            height: 'auto',
+          }}
+        />
+        <h1 className="font-bold pt-5 text-4xl text-[#0080A1]">{pageName}</h1>
+        <ul className="py-10">
+          {pageData.map((data: {
+            type: string; url: string;
+          }) => {
+            return (
+              <>
+                <div className="py-5">
+                  <a href={data.url} className="bg-[#9AE6F9] hover:bg-[#0080A1] hover:text-[#9AE6F9] text-[#0080A1] font-bold py-2 px-10 rounded">{data.type}</a><br />
+                </div>
+              </>
+            )
+          })}
+        </ul>
+        </div>
+      </div> 
     </>
   );
 };
