@@ -5,7 +5,7 @@ import axios, { type AxiosResponse } from "axios";
 import { env } from "~/env.mjs";
 import Image from 'next/image'
 
-const myLoader = ({ src, width, quality }) => {
+const myLoader = () => {
   return `https://robohash.org/32420_234fdg`
 }
 
@@ -23,7 +23,8 @@ interface PageData {
 const Page: NextPage<Props> = ({ pageName, pageData, image }) => {
   return (
     <>
-      <div className="w-full h-screen bg-[#F6F1FF]">
+    <div>
+      <div className="w-full h-screen bg-[url('/img/background.png')]">
         <div className="flex flex-col items-center justify-center text-center">
         <Image
           alt="Vercel logo"
@@ -43,7 +44,7 @@ const Page: NextPage<Props> = ({ pageName, pageData, image }) => {
           }) => {
             return (
               <>
-                <div className="py-5">
+                <div className="py-5 flex-shrink-1">
                   <a href={data.url} className="bg-[#9AE6F9] hover:bg-[#0080A1] hover:text-[#9AE6F9] text-[#0080A1] font-bold py-2 px-10 rounded">{data.type}</a><br />
                 </div>
               </>
@@ -51,7 +52,8 @@ const Page: NextPage<Props> = ({ pageName, pageData, image }) => {
           })}
         </ul>
         </div>
-      </div> 
+      </div>
+    </div>
     </>
   );
 };
