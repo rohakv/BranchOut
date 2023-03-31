@@ -4,9 +4,10 @@ const config = {
   theme: {
     extend: {
       backgroundImage: {
-        "hero": "url('/public/background.png')",
+        'bgimage': "url('../public/assets/images/hero.png')"
       }
     },
+    
   },
   plugins: [],
 };
