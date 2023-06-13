@@ -1,4 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
+import { RiYoutubeLine } from "react-icons/ri";
 
 interface ExtendedNextApiRequest extends NextApiRequest {
   body: {
@@ -30,7 +31,23 @@ export default function handler(req: ExtendedNextApiRequest, res: NextApiRespons
       res.json(pageData);
     }
 
-    res.end("id is not rohak")
+    if (req.body.id === "friend") {
+      const pageData = [
+        "friend's Page",
+        {
+          type: "Github",
+          url: "https://github.com/friend"
+        },
+        {
+          type: "Instagram",
+          url: "https://instagram.com/friend"
+        }
+      ]
+
+      res.json(pageData);
+    }
+
+    res.end("NO_PAGE")
     
   } else {
     res.send("WRONG METHOD");

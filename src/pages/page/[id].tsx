@@ -10,6 +10,8 @@ import { env } from "~/env.mjs";
 import Image from "next/image";
 import { Work_Sans } from "next/font/google";
 
+import { RiYoutubeLine } from "react-icons/ri";
+
 const myLoader = () => {
   return `https://robohash.org/32420_234fdg`;
 };
@@ -48,9 +50,12 @@ const Page: NextPage<Props> = ({ pageName, pageData, image }) => {
                       <button className="group relative mb-2 mr-2 inline-flex w-full items-center justify-center overflow-hidden rounded-lg bg-gradient-to-br from-purple-500 to-pink-500 p-0.5 text-sm font-medium text-gray-900 hover:text-white focus:outline-none focus:ring-4 focus:ring-purple-200 group-hover:from-purple-500 group-hover:to-pink-500 dark:text-white dark:focus:ring-purple-800">
                         <a
                           href={data.url}
-                          className="relative w-full flex-shrink-0 rounded-md bg-white px-5 py-2.5 transition-all duration-75 ease-in group-hover:bg-opacity-0 dark:bg-gray-900 font-bold"
+                          className="relative w-full inline-flex items-center rounded-md bg-white py-2.5 transition-all duration-75 ease-in group-hover:bg-opacity-0 dark:bg-gray-900 font-bold"
                         >
-                          {data.type}
+                          <RiYoutubeLine size={40} color="black" className="ml-4" />
+                          <div className="w-full text-center mr-9">
+                            {data.type}
+                          </div>
                         </a>
                       </button>
                       <br />
@@ -89,6 +94,18 @@ export const getServerSideProps: GetServerSideProps = async (
   const image = imageres.data;
 
   const data = res?.data;
+
+  if (!data) {
+    return {
+      notFound: true,
+    };
+  };
+
+  if (data === "NO_PAGE") {
+    return {
+      notFound: true,
+    };
+  };
 
   const pageName = data[0];
 
