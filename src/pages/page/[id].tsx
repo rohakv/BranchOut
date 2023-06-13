@@ -53,7 +53,7 @@ const Page: NextPage<Props> = ({ pageName, pageData, image }) => {
                           className="relative w-full inline-flex items-center rounded-md bg-white py-2.5 transition-all duration-75 ease-in group-hover:bg-opacity-0 dark:bg-gray-900 font-bold"
                         >
                           <RiYoutubeLine size={40} color="black" className="ml-4" />
-                          <div className="w-full text-center mr-9">
+                          <div className="w-full text-center mr-10">
                             {data.type}
                           </div>
                         </a>
